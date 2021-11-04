@@ -1,0 +1,79 @@
+﻿<Page
+    x:Class="HexagonGame.Views.GameCreationPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Style="{StaticResource PageStyle}"
+    xmlns:prismMvvm="using:Prism.Windows.Mvvm" 
+    mc:Ignorable="d">
+    <Grid x:Name="ContentArea" Margin="{StaticResource MediumLeftRightMargin}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <TextBlock Grid.Row="0" Grid.Column="0">Játékosok száma:</TextBlock>
+            <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding NumberOfPlayers, Mode=TwoWay}"></TextBox>
+            <TextBlock Grid.Row="1" Grid.Column="0">Színek száma:</TextBlock>
+            <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding NumberOfColors, Mode=TwoWay}"></TextBox>
+            <TextBlock Grid.Row="2" Grid.Column="0">Pálya mérete:</TextBlock>
+            <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding Size, Mode=TwoWay}"></TextBox>
+        </Grid>
+        <ListView Grid.Row="1" ItemsSource="{Binding Players, Mode=TwoWay}">
+            <ListView.HeaderTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <StackPanel.Resources>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="Margin" Value="10,0,10,0"/>
+                            </Style>
+                        </StackPanel.Resources>
+                        <TextBlock>Név</TextBlock>
+                        <TextBlock>Szín</TextBlock>
+                        <TextBlock>Robot</TextBlock>
+                        <TextBlock>Szint</TextBlock>
+                    </StackPanel>
+                </DataTemplate>
+            </ListView.HeaderTemplate>
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBox Text="{Binding Name}"></TextBox>
+                        <ComboBox ItemsSource="{Binding ElementName=ContentArea, Path=DataContext.ColorList}">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Rectangle Width="25" Height="15">
+                                        <Rectangle.Fill>
+                                            <SolidColorBrush Color="{Binding Converter={StaticResource MyColorToColorConverter}}"/>
+                                        </Rectangle.Fill>
+                                    </Rectangle>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+                        <CheckBox></CheckBox>
+                        <ComboBox></ComboBox>
+                    </StackPanel>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+        <Button Grid.Row="2" Command="{Binding StartGameCommand}">Kész</Button>
+
+    </Grid>
+</Page>
