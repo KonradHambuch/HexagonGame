@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
 using HexagonGame.Core.Models;
 using Prism.Commands;
 using Prism.Windows.Mvvm;
@@ -32,8 +33,7 @@ namespace HexagonGame.ViewModels
             _navigationService = navigationService;            
             
             NewGameCommand = new DelegateCommand(NewGame);
-            ChangeColorCommand = new DelegateCommand<object>(ChangeColorCommandFunc);
-           
+            ChangeColorCommand = new DelegateCommand<object>(ChangeColorCommandFunc);           
         }
         //Methods
         public override void OnNavigatedTo(NavigatedToEventArgs e, Dictionary<string, object> viewModelState)
@@ -49,11 +49,11 @@ namespace HexagonGame.ViewModels
         {
             Game.ActivePlayer.ChangeColor((MyColor)color, Game.Fields);            
             Game.ActivateNextPlayer();
+            Game.FindFreeColors();     
             if(Game.ActivePlayer is RobotPlayer)
             {
                 Game.TakeRobotTurns();
             }
-            Game.FindFreeColors();     
         }                
     }
 }

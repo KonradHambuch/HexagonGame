@@ -12,6 +12,12 @@ namespace HexagonGame.Core.Models
     public class Game : BindableBase
     {
         private Player activePlayer;
+        private bool realPlayerTakingTurn;
+        public bool RealPlayerTakingTurn 
+        {
+            get => realPlayerTakingTurn;
+            set => SetProperty(ref realPlayerTakingTurn, value);
+        }
         public ObservableCollection<Field> Fields { get; set; } = new ObservableCollection<Field>();
         public ObservableCollection<Player> Players { get; set; } = new ObservableCollection<Player>();
         public ObservableCollection<MyColor> FieldColors { get; set; } = new ObservableCollection<MyColor>();
@@ -28,7 +34,8 @@ namespace HexagonGame.Core.Models
             FieldColors = GameSettings.ColorList;
             CreateHexagons(GameSettings.Size, GameSettings.Width, GameSettings.Height);
             ActivePlayer = Players[0];
-            foreach (var player in GameSettings.Players)
+            RealPlayerTakingTurn =  ActivePlayer is RobotPlayer ? false : true;
+            foreach (var player in Players)
             {
                 player.FindOwnFields(Fields);
                 foreach (var field in player.OwnFields)
@@ -80,17 +87,18 @@ namespace HexagonGame.Core.Models
                 FreeColors.Add(color);
             }
         }
-        public async Task TakeRobotTurns()
+        public void TakeRobotTurns()
         {
+            RealPlayerTakingTurn = false;
             while(ActivePlayer is RobotPlayer)
             {
-                await Task.Delay(2000);
+                //await Task.Delay(2000);
                 RobotPlayer Robot = (RobotPlayer)ActivePlayer;
                 Robot.ChangeColor(Fields, FreeColors);
                 ActivateNextPlayer();
                 FindFreeColors();
             }
+            RealPlayerTakingTurn = true;
         }
-
     }
 }

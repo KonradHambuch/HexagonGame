@@ -30,7 +30,7 @@
             </ItemsControl.ItemsPanel>
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <Button Command="{Binding ElementName=ContentArea, Path=DataContext.ChangeColorCommand}" CommandParameter="{Binding}" Padding="0,0,0,0" Margin="10,0,10,0">
+                    <Button Command="{Binding ElementName=ContentArea, Path=DataContext.ChangeColorCommand}" CommandParameter="{Binding}" IsEnabled="{Binding Game.RealPlayerTakingTurn}" Padding="0,0,0,0" Margin="10,0,10,0">
                         <Rectangle Width="25" Height="25">
                             <Rectangle.Fill>
                                 <SolidColorBrush Color="{Binding Converter={StaticResource MyColorToColorConverter}}"/>
