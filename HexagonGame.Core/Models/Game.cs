@@ -33,8 +33,7 @@ namespace HexagonGame.Core.Models
             Players = GameSettings.Players;
             FieldColors = GameSettings.ColorList;
             CreateHexagons(GameSettings.Size, GameSettings.Width, GameSettings.Height);
-            ActivePlayer = Players[0];
-            RealPlayerTakingTurn =  ActivePlayer is RobotPlayer ? false : true;
+            ActivateNextPlayer();            
             foreach (var player in Players)
             {
                 player.FindOwnFields(Fields);
@@ -53,7 +52,14 @@ namespace HexagonGame.Core.Models
         }
         public void ActivateNextPlayer()
         {
-            ActivePlayer = Players.IndexOf(ActivePlayer) == Players.Count - 1 ? Players[0] : Players[Players.IndexOf(ActivePlayer) + 1];
+            if (ActivePlayer == null) ActivePlayer = Players[0];            
+            else ActivePlayer = Players.IndexOf(ActivePlayer) == Players.Count - 1 ? Players[0] : Players[Players.IndexOf(ActivePlayer) + 1];
+            RealPlayerTakingTurn = ActivePlayer is RobotPlayer ? false : true;
+            ActivePlayer.IsActive = true;
+            foreach (var player in Players)
+            {
+                if (player != ActivePlayer) player.IsActive = false;
+            }
         }
         public void CreateHexagons(int Size, double Width, double Height)
         {
@@ -89,7 +95,6 @@ namespace HexagonGame.Core.Models
         }
         public void TakeRobotTurns()
         {
-            RealPlayerTakingTurn = false;
             while(ActivePlayer is RobotPlayer)
             {
                 //await Task.Delay(2000);
@@ -98,7 +103,6 @@ namespace HexagonGame.Core.Models
                 ActivateNextPlayer();
                 FindFreeColors();
             }
-            RealPlayerTakingTurn = true;
         }
     }
 }

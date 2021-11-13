@@ -45,7 +45,7 @@
                             <ColumnDefinition Width="50"/>
                             <ColumnDefinition Width="100"/>
                         </Grid.ColumnDefinitions>
-                        <TextBox Grid.Column="0" Text="{Binding Name}"></TextBox>
+                        <TextBox Grid.Column="0" Text="{Binding Name, Mode=TwoWay}"></TextBox>
                         <Rectangle Grid.Column="1" Width="25" Height="15">
                             <Rectangle.Fill>
                                 <SolidColorBrush Color="{Binding Color, Converter={StaticResource MyColorToColorConverter}}"/>

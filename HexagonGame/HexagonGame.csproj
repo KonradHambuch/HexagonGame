@@ -137,8 +137,8 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="Converters\ColorsToRadialGradientBrushConverter.cs" />
+    <Compile Include="Converters\IsActiveBoolToColorConverter.cs" />
     <Compile Include="Converters\MyColorToColorConverter.cs" />
-    <Compile Include="Converters\PlayerToIsRobotConverter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Constants\PageTokens.cs" />
     <Compile Include="ViewModels\GameCreationViewModel.cs" />

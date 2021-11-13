@@ -14,6 +14,12 @@ namespace HexagonGame.Core.Models
             get => name;
             set => SetProperty(ref name, value);
         }
+        private bool isActive;
+        public bool IsActive
+        {
+            get => isActive;
+            set => SetProperty(ref isActive, value);
+        }
         public List<Field> OwnFields { get; set; } = new List<Field>();
         public int StartCoordX { get; set; }
         public int StartCoordY { get; set; }

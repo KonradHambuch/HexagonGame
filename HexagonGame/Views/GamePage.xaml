@@ -22,7 +22,7 @@
 
 
         <!--Color Buttons-->
-        <ItemsControl Grid.Row="1" ItemsSource="{Binding Game.FreeColors}">
+        <ItemsControl Grid.Row="1" Grid.Column="0" ItemsSource="{Binding Game.FreeColors}" Margin="10,10,10,10" > 
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
                     <StackPanel Orientation="Horizontal"/>
@@ -36,7 +36,6 @@
                                 <SolidColorBrush Color="{Binding Converter={StaticResource MyColorToColorConverter}}"/>
                             </Rectangle.Fill>
                         </Rectangle>
-
                     </Button>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
@@ -51,18 +50,20 @@
             </ItemsControl.ItemsPanel>
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <Grid Padding="10,10,10,0">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="200"/>
-                            <ColumnDefinition Width="100"/>
-                        </Grid.ColumnDefinitions>
-                        <TextBlock Text="{Binding Name}"></TextBlock>
-                        <Rectangle Width="25" Height="25">
-                            <Rectangle.Fill>
-                                <SolidColorBrush Color="{Binding Color, Converter={StaticResource MyColorToColorConverter}}"/>
-                            </Rectangle.Fill>
-                        </Rectangle>
-                    </Grid>                   
+                    <Border Background="{Binding IsActive, Converter={StaticResource IsActiveBoolToColorConverter}}">                        
+                        <Grid Padding="10,10,10,10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="200"/>
+                                <ColumnDefinition Width="25"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" Text="{Binding Name}"></TextBlock>
+                            <Rectangle Grid.Column="1" Width="25" Height="25">
+                                <Rectangle.Fill>
+                                    <SolidColorBrush Color="{Binding Color, Converter={StaticResource MyColorToColorConverter}}"/>
+                                </Rectangle.Fill>
+                            </Rectangle>
+                        </Grid>                   
+                    </Border>
                    
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
