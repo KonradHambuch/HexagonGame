@@ -8,7 +8,7 @@ namespace HexagonGame.Views
 {
     public sealed partial class GameCreationPage : Page
     {
-        private GameViewModel ViewModel => DataContext as GameViewModel;
+        private GameCreationViewModel ViewModel => DataContext as GameCreationViewModel;
 
         public GameCreationPage()
         {

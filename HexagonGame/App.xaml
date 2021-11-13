@@ -18,6 +18,7 @@
             </ResourceDictionary.MergedDictionaries>
             <converters:ColorsToRadialGradientBrushConverter x:Key="ColorsToRadialGradientBrushConverter" />
             <converters:MyColorToColorConverter x:Key="MyColorToColorConverter" />
+            <converters:PlayerToIsRobotConverter x:Key="PlayerToIsRobotConverter" />
         </ResourceDictionary>
     </prismUnity:PrismUnityApplication.Resources>
 </prismUnity:PrismUnityApplication>

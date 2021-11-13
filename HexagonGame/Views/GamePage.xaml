@@ -22,9 +22,7 @@
 
 
         <!--Color Buttons-->
-        <TextBlock Grid.Row="0" Grid.Column="0" Text="{Binding ActivePlayer.Name}" VerticalAlignment="Center"></TextBlock>
-        <TextBlock Grid.Row="0" Grid.Column="1" VerticalAlignment="Center">your Turn:</TextBlock>
-        <ItemsControl Grid.Row="1" ItemsSource="{Binding ColorList}">
+        <ItemsControl Grid.Row="1" ItemsSource="{Binding Game.FreeColors}">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
                     <StackPanel Orientation="Horizontal"/>
@@ -44,9 +42,34 @@
             </ItemsControl.ItemTemplate>
         </ItemsControl>
 
+        <!--Players-->
+        <ItemsControl Grid.Row="2" Grid.Column="0" ItemsSource="{Binding Game.Players}">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <StackPanel Orientation="Vertical"/>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Grid Padding="10,10,10,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="200"/>
+                            <ColumnDefinition Width="100"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="{Binding Name}"></TextBlock>
+                        <Rectangle Width="25" Height="25">
+                            <Rectangle.Fill>
+                                <SolidColorBrush Color="{Binding Color, Converter={StaticResource MyColorToColorConverter}}"/>
+                            </Rectangle.Fill>
+                        </Rectangle>
+                    </Grid>                   
+                   
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
 
         <!--Hexagons-->
-        <ItemsControl Grid.Row="1" ItemsSource="{Binding Fields}">
+        <ItemsControl Grid.Row="2" Grid.Column="1" ItemsSource="{Binding Game.Fields}">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
                     <Canvas/>
@@ -54,14 +77,17 @@
             </ItemsControl.ItemsPanel>
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <StackPanel>
-                        <Polygon Points="{Binding PolygonItem.PointsString}" Fill="{Binding Colors, Converter={StaticResource ColorsToRadialGradientBrushConverter}}" Stroke="Black"/>
-                    </StackPanel>
+                    <Polygon Points="{Binding PolygonItem.PointsString}" StrokeThickness="5">
+                        <Polygon.Stroke>
+                            <SolidColorBrush Color="{Binding Colors.MarkColor, Converter={StaticResource MyColorToColorConverter}}"/>
+                        </Polygon.Stroke>
+                        <Polygon.Fill>
+                            <SolidColorBrush Color="{Binding Colors.OwnColor, Converter={StaticResource MyColorToColorConverter}}"></SolidColorBrush>                                
+                        </Polygon.Fill>                    
+                    </Polygon>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>
-
-        <Button Margin="10,0,0,0" Grid.Row="2" Grid.Column="0" Command="{Binding RetryCommand}">Újra</Button>
-
+        <Button Margin="10,0,0,0" Grid.Row="3" Grid.Column="0" Command="{Binding NewGameCommand}">Új Játék</Button>
     </Grid>
 </Page>
