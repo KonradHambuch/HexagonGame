@@ -58,29 +58,24 @@ namespace HexagonGame.Core.Models
             FindOneColorArea(StartCoordX, StartCoordY, AllFields, StartField.Colors.OwnColor, OwnFields);
             return OwnFields;
         }
-        public Dictionary<MyColor, HashSet<Field>> CountNegihbourColors(ObservableCollection<Field> AllFields)
+        public Dictionary<MyColor, HashSet<Field>> CountNegihbourColors(ObservableCollection<Field> AllFields, ObservableCollection<MyColor> FreeColors)
         {
-            OneColorNeighbourFields = new Dictionary<MyColor, HashSet<Field>>();
-            var PossibleColors = new HashSet<MyColor>();
+            OneColorNeighbourFields = new Dictionary<MyColor, HashSet<Field>>();            
             HashSet<Field> neighbours = new HashSet<Field>();
             FindOwnFields(AllFields);
             OwnFields.ForEach(f =>
             {
                 var fieldNeighbours = FindNeighboursOfField(f, AllFields);
-                fieldNeighbours.RemoveAll(field => AllFields.Contains(field));
+                fieldNeighbours.RemoveAll(field => OwnFields.Contains(field));
                 fieldNeighbours.ForEach(fn => neighbours.Add(fn));
             });
-            foreach (var neighbour in neighbours)
-            {
-                PossibleColors.Add(neighbour.Colors.OwnColor);
-            }
             foreach (var neighbour in neighbours)
             {
                 if (OneColorNeighbourFields.ContainsKey(neighbour.Colors.OwnColor))
                 {
                     FindOneColorArea(neighbour.CoordX, neighbour.CoordY, AllFields).ForEach(neigh => OneColorNeighbourFields[neighbour.Colors.OwnColor].Add(neigh));
                 }
-                else
+                else if(FreeColors.Contains(neighbour.Colors.OwnColor))
                 {
                     OneColorNeighbourFields.Add(neighbour.Colors.OwnColor, new HashSet<Field>(FindOneColorArea(neighbour.CoordX, neighbour.CoordY, AllFields)));
                 }

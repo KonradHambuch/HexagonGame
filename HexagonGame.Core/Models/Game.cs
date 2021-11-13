@@ -5,6 +5,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace HexagonGame.Core.Models
 {
@@ -79,14 +80,15 @@ namespace HexagonGame.Core.Models
                 FreeColors.Add(color);
             }
         }
-        public void TakeRobotTurns()
+        public async Task TakeRobotTurns()
         {
             while(ActivePlayer is RobotPlayer)
             {
-                Thread.Sleep(2000);
+                await Task.Delay(2000);
                 RobotPlayer Robot = (RobotPlayer)ActivePlayer;
-                Robot.ChangeColor(Fields);
+                Robot.ChangeColor(Fields, FreeColors);
                 ActivateNextPlayer();
+                FindFreeColors();
             }
         }
 

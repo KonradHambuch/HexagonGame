@@ -13,11 +13,11 @@ namespace HexagonGame.Core.Models
         {
             
         }
-        public MyColor ChooseColor(ObservableCollection<Field> AllFields)
+        public MyColor ChooseColor(ObservableCollection<Field> AllFields, ObservableCollection<MyColor> FreeColors)
         {
             int MaxCount = 0;
             MyColor MaxColor = new MyColor();
-            Dictionary<MyColor, HashSet<Field>> ColorNeighbours = CountNegihbourColors(AllFields);
+            Dictionary<MyColor, HashSet<Field>> ColorNeighbours = CountNegihbourColors(AllFields, FreeColors);
             foreach (var entry in ColorNeighbours)
             {
                 if (entry.Value.Count > MaxCount)
@@ -28,9 +28,9 @@ namespace HexagonGame.Core.Models
             }
             return MaxColor;
         }        
-        public void ChangeColor(ObservableCollection<Field> AllFields)
+        public void ChangeColor(ObservableCollection<Field> AllFields, ObservableCollection<MyColor> FreeColors)
         {
-            base.ChangeColor(ChooseColor(AllFields), AllFields);
+            base.ChangeColor(ChooseColor(AllFields, FreeColors), AllFields);
         }
     }
 }
