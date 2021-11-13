@@ -8,10 +8,10 @@ namespace HexagonGame.Core.Models
 {
     public class RobotPlayer : Player
     {
-        public int Level { get; set; }
+        public int Level { get; set; } = 5;
         public RobotPlayer(string Name, int StartCoordX, int StartCoordY, MyColor Color) : base(Name, StartCoordX, StartCoordY, Color)
         {
-            
+            IsRobot = true;
         }
         public MyColor ChooseColor(ObservableCollection<Field> AllFields, ObservableCollection<MyColor> FreeColors)
         {

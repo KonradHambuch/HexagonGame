@@ -25,7 +25,7 @@
         <ItemsControl Grid.Row="1" Grid.Column="0" ItemsSource="{Binding Game.FreeColors}" Margin="10,10,10,10" > 
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <StackPanel Orientation="Horizontal"/>
+                    <StackPanel Orientation="Horizontal" />
                 </ItemsPanelTemplate>
             </ItemsControl.ItemsPanel>
             <ItemsControl.ItemTemplate>

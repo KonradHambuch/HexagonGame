@@ -8,6 +8,7 @@ using Prism.Commands;
 using Prism.Windows.Mvvm;
 using Prism.Windows.Navigation;
 using Windows.Foundation;
+using Windows.UI.ViewManagement;
 
 namespace HexagonGame.ViewModels
 {
@@ -29,7 +30,7 @@ namespace HexagonGame.ViewModels
         public DelegateCommand<object> ChangeColorCommand { get; set; }
         //Ctor
         public GameViewModel(INavigationService navigationService)
-        {
+        {  
             _navigationService = navigationService;            
             
             NewGameCommand = new DelegateCommand(NewGame);

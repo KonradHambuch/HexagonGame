@@ -1,7 +1,8 @@
 ﻿using System;
 
 using HexagonGame.ViewModels;
-
+using Windows.Foundation;
+using Windows.UI.ViewManagement;
 using Windows.UI.Xaml.Controls;
 
 namespace HexagonGame.Views
@@ -13,6 +14,10 @@ namespace HexagonGame.Views
         public GamePage()
         {
             InitializeComponent();
+            var bounds = ApplicationView.GetForCurrentView().VisibleBounds;
+
+            ApplicationView.PreferredLaunchViewSize = new Size(bounds.Width, bounds.Height);
+            ApplicationView.PreferredLaunchWindowingMode = ApplicationViewWindowingMode.PreferredLaunchViewSize;
         }
     }
 }

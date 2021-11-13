@@ -20,14 +20,14 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <Button Grid.Row="0" Grid.Column="0" Command="{Binding NewPlayerCommand}" IsEnabled="{Binding CanAddMorePlayers}">Új játékos</Button>
-        <Button Grid.Row="0" Grid.Column="1" Command="{Binding NewRobotCommand}" IsEnabled="{Binding CanAddMorePlayers}">Új robot játékos</Button>
+        <Button Grid.Row="0" Grid.Column="0" Command="{Binding NewPlayerCommand}" IsEnabled="{Binding CanAddMorePlayers}" Margin="12,12,0,0">Új játékos</Button>
+        <Button Grid.Row="0" Grid.Column="1" Command="{Binding NewRobotCommand}" IsEnabled="{Binding CanAddMorePlayers}" Margin="12,12,0,0">Új robot játékos</Button>
         <ListView Grid.Row="1" Grid.ColumnSpan="2" ItemsSource="{Binding GameSettings.Players, Mode=TwoWay}">
             <ListView.HeaderTemplate>
                 <DataTemplate>
                     <Grid Margin="20,0,0,0">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="150"/>
+                            <ColumnDefinition Width="120"/>
                             <ColumnDefinition Width="50"/>
                             <ColumnDefinition Width="100"/>
                         </Grid.ColumnDefinitions>
@@ -41,9 +41,9 @@
                 <DataTemplate>
                     <Grid>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="150"/>
+                            <ColumnDefinition Width="120"/>
                             <ColumnDefinition Width="50"/>
-                            <ColumnDefinition Width="100"/>
+                            <ColumnDefinition Width="80"/>
                         </Grid.ColumnDefinitions>
                         <TextBox Grid.Column="0" Text="{Binding Name, Mode=TwoWay}"></TextBox>
                         <Rectangle Grid.Column="1" Width="25" Height="15">
@@ -51,18 +51,25 @@
                                 <SolidColorBrush Color="{Binding Color, Converter={StaticResource MyColorToColorConverter}}"/>
                             </Rectangle.Fill>
                         </Rectangle>
-                        <ComboBox Grid.Column="2"></ComboBox>
+                        <Slider Grid.Column="2" Value="{Binding Level, Mode=TwoWay}" Minimum="1" Maximum="5" Visibility="{Binding IsRobot, Converter={StaticResource BoolToVisibilityConverter}}"></Slider>
                     </Grid>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
-        
-        <TextBlock Grid.Row="2" Grid.Column="0">Mező színek száma:</TextBlock>
-        <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding GameSettings.NumberOfColors, Mode=TwoWay}"></TextBox>
-        <TextBlock Grid.Row="3" Grid.Column="0">Pálya mérete:</TextBlock>
-        <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding GameSettings.Size, Mode=TwoWay}"></TextBox>
+        <Grid Grid.Row="2" Grid.ColumnSpan="2" Margin="12,0,0,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
 
-        <Button Grid.Row="4" Grid.Column="0" Command="{Binding StartGameCommand}">Kész</Button>
-
+            </Grid.ColumnDefinitions>
+            <TextBox Header="Mező színek száma:"  Grid.Row="0" Text="{Binding GameSettings.NumberOfColors, Mode=TwoWay}"></TextBox>
+            
+            <TextBox Header="Pálya mérete:" Grid.Row="1" Text="{Binding GameSettings.Size, Mode=TwoWay}"></TextBox>
+            <Button Grid.Row="2" Grid.ColumnSpan="2" Command="{Binding StartGameCommand}" HorizontalAlignment="Center" Margin="0,10">Játék indítása</Button>            
+        </Grid>
     </Grid>
 </Page>

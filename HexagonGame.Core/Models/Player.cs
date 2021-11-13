@@ -8,6 +8,7 @@ namespace HexagonGame.Core.Models
 {
     public class Player : BindableBase
     {
+        public bool IsRobot { get; set; } = false;
         private string name;
         public string Name
         {

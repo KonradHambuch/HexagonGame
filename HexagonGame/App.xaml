@@ -4,7 +4,8 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:prismUnity="using:Prism.Unity.Windows"
     xmlns:converters="using:HexagonGame.Converters"
-    RequestedTheme="Light">
+    RequestedTheme="Light"
+    xmlns:uwpconverters="using:Microsoft.Toolkit.Uwp.UI.Converters">
 
     <prismUnity:PrismUnityApplication.Resources>
         <ResourceDictionary>
@@ -19,6 +20,7 @@
             <converters:ColorsToRadialGradientBrushConverter x:Key="ColorsToRadialGradientBrushConverter" />
             <converters:MyColorToColorConverter x:Key="MyColorToColorConverter" />
             <converters:IsActiveBoolToColorConverter x:Key="IsActiveBoolToColorConverter" />
+            <uwpconverters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />            
         </ResourceDictionary>
     </prismUnity:PrismUnityApplication.Resources>
 </prismUnity:PrismUnityApplication>
