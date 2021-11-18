@@ -8,29 +8,27 @@
     xmlns:prismMvvm="using:Prism.Windows.Mvvm"
     prismMvvm:ViewModelLocator.AutoWireViewModel="True" 
     mc:Ignorable="d">
-    <Grid x:Name="ContentArea" Margin="{StaticResource MediumLeftRightMargin}">
+    <Grid x:Name="ContentArea" Margin="{StaticResource MediumLeftRightMargin}" VerticalAlignment="Center" >
         <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
 
         <!--Color Buttons-->
-        <ItemsControl Grid.Row="1" Grid.Column="0" ItemsSource="{Binding Game.FreeColors}" Margin="10,10,10,10" > 
+        <ItemsControl Grid.Column="1" Grid.Row="0" ItemsSource="{Binding Game.FreeColors}" Margin="10,10,10,10" > 
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <StackPanel Orientation="Horizontal" />
+                    <StackPanel Orientation="Vertical" />
                 </ItemsPanelTemplate>
             </ItemsControl.ItemsPanel>
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <Button Command="{Binding ElementName=ContentArea, Path=DataContext.ChangeColorCommand}" CommandParameter="{Binding}" IsEnabled="{Binding ElementName=ContentArea, Path=DataContext.Game.RealPlayerTakingTurn}" Padding="0,0,0,0" Margin="10,0,10,0">
+                    <Button Command="{Binding ElementName=ContentArea, Path=DataContext.ChangeColorCommand}" CommandParameter="{Binding}" IsEnabled="{Binding ElementName=ContentArea, Path=DataContext.Game.RealPlayerTakingTurn}" Padding="0,0,0,0" Margin="10,10,10,10">
                         <Rectangle Width="25" Height="25">
                             <Rectangle.Fill>
                                 <SolidColorBrush Color="{Binding Converter={StaticResource MyColorToColorConverter}}"/>
@@ -42,7 +40,7 @@
         </ItemsControl>
 
         <!--Players-->
-        <ItemsControl Grid.Row="2" Grid.Column="0" ItemsSource="{Binding Game.Players}">
+        <ItemsControl Grid.Row="0" Grid.Column="0" ItemsSource="{Binding Game.Players}">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
                     <StackPanel Orientation="Vertical"/>
@@ -70,10 +68,10 @@
         </ItemsControl>
 
         <!--Hexagons-->
-        <ItemsControl Grid.Row="2" Grid.Column="1" ItemsSource="{Binding Game.Fields}">
+        <ItemsControl Grid.Row="0" Grid.Column="2" ItemsSource="{Binding Game.Fields}">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <Canvas/>
+                    <Canvas Width="600" Height="600"/>
                 </ItemsPanelTemplate>
             </ItemsControl.ItemsPanel>
             <ItemsControl.ItemTemplate>
@@ -83,12 +81,11 @@
                             <SolidColorBrush Color="{Binding Colors.MarkColor, Converter={StaticResource MyColorToColorConverter}}"/>
                         </Polygon.Stroke>
                         <Polygon.Fill>
-                            <SolidColorBrush Color="{Binding Colors.OwnColor, Converter={StaticResource MyColorToColorConverter}}"></SolidColorBrush>                                
-                        </Polygon.Fill>                    
+                            <SolidColorBrush Color="{Binding Colors.OwnColor, Converter={StaticResource MyColorToColorConverter}}"></SolidColorBrush>
+                        </Polygon.Fill>
                     </Polygon>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>
-        <Button Margin="10,0,0,0" Grid.Row="3" Grid.Column="0" Command="{Binding NewGameCommand}">Új Játék</Button>
     </Grid>
 </Page>

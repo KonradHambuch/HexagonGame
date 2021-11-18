@@ -4,6 +4,8 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using HexagonGame.Core.Models;
+using HexagonGame.Services;
+using HexagonGame.Views;
 using Prism.Commands;
 using Prism.Windows.Mvvm;
 using Prism.Windows.Navigation;
@@ -15,7 +17,8 @@ namespace HexagonGame.ViewModels
     public class GameViewModel : ViewModelBase
     {
         //Private fields
-        private INavigationService _navigationService;              
+        private INavigationService _navigationService;
+        private Database Database = new Database();
         private Game game;
         //Properties
         public INavigationService NavigationService { get; set; }        
@@ -51,12 +54,27 @@ namespace HexagonGame.ViewModels
             Game.ActivePlayer.ChangeColor((MyColor)color, Game.Fields);            
             Game.ActivateNextPlayer();
             Game.FindFreeColors();
-            Game.TryDetectEndOfGame();
+            if (TryDetectEndOfGame()) NavigateToRankingsDialog();
             if(Game.ActivePlayer is RobotPlayer)
             {
                 Game.RealPlayerTakingTurn = false;
                 await Game.TakeRobotTurns();
             }
-        }                
+
+        }
+        public void NavigateToRankingsDialog()
+        {  
+            _navigationService.Navigate(PageTokens.RankingDialogPage, Database.Rankings);
+        }
+        public bool TryDetectEndOfGame()
+        {
+            if (Game.Fields.All(f => Game.Players.Any(p => p.OwnFields.Contains(f))))
+            {
+                Player WINNER = Game.Players.Aggregate((mostFields, next) => next.OwnFields.Count > mostFields.OwnFields.Count ? next : mostFields);
+                Database.AddWinner(WINNER);
+                return true;
+            }
+            return false;
+        }
     }
 }

@@ -127,23 +127,13 @@ namespace HexagonGame.Core.Models
         {
             while(ActivePlayer is RobotPlayer)
             {
-                await Task.Delay(2000);
+                await Task.Delay(200);
                 RobotPlayer Robot = (RobotPlayer)ActivePlayer;
                 Robot.ChangeColor(Fields, FreeColors);
                 ActivateNextPlayer();
                 FindFreeColors();
-                TryDetectEndOfGame();
             }
             RealPlayerTakingTurn = true;
-        }
-        public bool TryDetectEndOfGame()
-        {
-            if(Fields.All(f => Players.Any(p => p.OwnFields.Contains(f))))
-            {
-                Player WINNER = Players.Aggregate((mostFields, next) => next.OwnFields.Count > mostFields.OwnFields.Count ? next : mostFields);
-                return true;
-            }
-            return false;
-        }
+        }        
     }
 }
