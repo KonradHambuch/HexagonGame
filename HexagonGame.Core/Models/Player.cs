@@ -25,70 +25,20 @@ namespace HexagonGame.Core.Models
         public int StartCoordX { get; set; }
         public int StartCoordY { get; set; }
         public MyColor Color { get; set; }
-        Dictionary<MyColor, HashSet<Field>> OneColorNeighbourFields = new Dictionary<MyColor, HashSet<Field>>();
-        public Player(string Name, int StartCoordX, int StartCoordY, MyColor Color)
+        
+        public Player(string Name, MyColor Color)
         {
             this.Name = Name;
-            this.StartCoordX = StartCoordX;
-            this.StartCoordY = StartCoordY;
             this.Color = Color;
             OwnFields = new List<Field>();
-        }
-        List<Field> FindNeighboursOfField(Field field, ObservableCollection<Field> AllFields)
-        {
-            return AllFields.Where(f => Math.Abs(f.CoordX + f.CoordY - field.CoordX - field.CoordY) <= 1 && Math.Abs(f.CoordX - field.CoordX) <= 1 && Math.Abs(f.CoordY - field.CoordY) <= 1).ToList();
-        }
-        public List<Field> FindOneColorArea(int StartCoordX, int StartCoordY, ObservableCollection<Field> AllFields)
-        {
-            List<Field> Acc = new List<Field>();
-            Field StartField = AllFields.First(f => f.CoordX == StartCoordX && f.CoordY == StartCoordY);
-            FindOneColorArea(StartCoordX, StartCoordY, AllFields, StartField.Colors.OwnColor, Acc);
-            return Acc;
-        }
-        private void FindOneColorArea(int StartCoordX, int StartCoordY, ObservableCollection<Field> AllFields, MyColor FieldColor, List<Field> Accumulator)
-        {
-            Field StartField = AllFields.First(f => f.CoordX == StartCoordX && f.CoordY == StartCoordY);
-            Accumulator.Add(StartField);
-            List<Field> NeighbourFields = FindNeighboursOfField(StartField, AllFields);
-            var ColorableNeighbours = AllFields.Where(f => NeighbourFields.Contains(f) && f.Colors.OwnColor == FieldColor && !Accumulator.Contains(f)).ToList();
-            if (ColorableNeighbours.Count == 0) return;
-            ColorableNeighbours.ForEach(f =>
-            {
-                Accumulator.Add(f);
-                FindOneColorArea(f.CoordX, f.CoordY, AllFields, FieldColor, Accumulator);
-            });
-        }
+        }        
         public List<Field> FindOwnFields(ObservableCollection<Field> AllFields)
         {
             OwnFields.Clear();
             Field StartField = AllFields.First(f => f.CoordX == StartCoordX && f.CoordY == StartCoordY);
-            FindOneColorArea(StartCoordX, StartCoordY, AllFields, StartField.Colors.OwnColor, OwnFields);
+            OwnFields = StartField.FindOneColorAreaFromHere(AllFields);
             return OwnFields;
-        }
-        public Dictionary<MyColor, HashSet<Field>> CountNegihbourColors(ObservableCollection<Field> AllFields, ObservableCollection<MyColor> FreeColors)
-        {
-            OneColorNeighbourFields = new Dictionary<MyColor, HashSet<Field>>();            
-            HashSet<Field> neighbours = new HashSet<Field>();
-            FindOwnFields(AllFields);
-            OwnFields.ForEach(f =>
-            {
-                var fieldNeighbours = FindNeighboursOfField(f, AllFields);
-                fieldNeighbours.RemoveAll(field => OwnFields.Contains(field));
-                fieldNeighbours.ForEach(fn => neighbours.Add(fn));
-            });
-            foreach (var neighbour in neighbours)
-            {
-                if (OneColorNeighbourFields.ContainsKey(neighbour.Colors.OwnColor))
-                {
-                    FindOneColorArea(neighbour.CoordX, neighbour.CoordY, AllFields).ForEach(neigh => OneColorNeighbourFields[neighbour.Colors.OwnColor].Add(neigh));
-                }
-                else if(FreeColors.Contains(neighbour.Colors.OwnColor))
-                {
-                    OneColorNeighbourFields.Add(neighbour.Colors.OwnColor, new HashSet<Field>(FindOneColorArea(neighbour.CoordX, neighbour.CoordY, AllFields)));
-                }
-            }
-            return OneColorNeighbourFields;
-        }
+        }        
         public void ChangeColor(MyColor NewColor, ObservableCollection<Field> AllFields)
         {
             FindOwnFields(AllFields);

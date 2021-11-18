@@ -61,15 +61,20 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
 
             </Grid.ColumnDefinitions>
-            <TextBox Header="Mező színek száma:"  Grid.Row="0" Text="{Binding GameSettings.NumberOfColors, Mode=TwoWay}"></TextBox>
+            <TextBox Header="Mező színek száma:" Grid.Row="0" Text="{Binding GameSettings.NumberOfColors, Mode=TwoWay}"></TextBox>
+            <TextBlock Grid.Row="1" Text="{Binding GameSettings.ColorNumberError}"/>
+
+            <TextBox Header="Pálya mérete:" Grid.Row="2" Text="{Binding GameSettings.Size, Mode=TwoWay}"></TextBox>
+            <TextBlock Grid.Row="3"  Text="{Binding GameSettings.SizeError}"/>
             
-            <TextBox Header="Pálya mérete:" Grid.Row="1" Text="{Binding GameSettings.Size, Mode=TwoWay}"></TextBox>
-            <Button Grid.Row="2" Grid.ColumnSpan="2" Command="{Binding StartGameCommand}" HorizontalAlignment="Center" Margin="0,10">Játék indítása</Button>            
+            <Button Grid.Row="4" IsEnabled="{Binding GameSettings.AllValid}" Command="{Binding StartGameCommand}" HorizontalAlignment="Center" Margin="0,10">Játék indítása</Button>            
         </Grid>
     </Grid>
 </Page>

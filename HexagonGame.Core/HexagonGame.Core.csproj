@@ -9,5 +9,6 @@
     <PackageReference Include="Microsoft.UI.Xaml" Version="2.7.0" />
     <PackageReference Include="Prism.Core" Version="6.3.0" />
     <PackageReference Include="Prism.Unity" Version="6.3.0" />
+    <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
   </ItemGroup>
 </Project>

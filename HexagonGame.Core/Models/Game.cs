@@ -12,6 +12,7 @@ namespace HexagonGame.Core.Models
     public class Game : BindableBase
     {
         private Player activePlayer;
+        public int Size { get; set; }
         private bool realPlayerTakingTurn;
         public bool RealPlayerTakingTurn 
         {
@@ -30,25 +31,54 @@ namespace HexagonGame.Core.Models
 
         public Game(GameSettings GameSettings)
         {
+            Size = GameSettings.Size;
             Players = GameSettings.Players;
-            FieldColors = GameSettings.ColorList;
+            for (int i = 0; i < GameSettings.NumberOfColors; i++)
+            {
+                AddRandomColor();
+            }            
             CreateHexagons(GameSettings.Size, GameSettings.Width, GameSettings.Height);
-            ActivateNextPlayer();            
             foreach (var player in Players)
             {
+                (int X, int Y) = PickRandomUnoccupiedField();
+                player.StartCoordX = X;
+                player.StartCoordY = Y;
                 player.FindOwnFields(Fields);
                 foreach (var field in player.OwnFields)
                 {
                     field.Mark(player.Color);
                 }
             }
+            ActivateNextPlayer();  
             FindFreeColors();            
+        }
+        public void AddRandomColor()
+        {
+            Random random = new Random();
+            MyColor NewColor = new MyColor(((byte)random.Next(3) + 5) * 31, (byte)random.Next(4) * 60, (byte)random.Next(4) * 60, (byte)random.Next(4) * 60);
+            if (FieldColors.Any(c => c.TooSimilarTo(NewColor)))
+            {
+                AddRandomColor();
+            }
+            else
+            {
+                FieldColors.Add(NewColor);
+                return;
+            }
         }
         public MyColor PickRandomColor(int NumberOfColors = 6)
         {
             Random rnd = new Random();
             var idx = rnd.Next(0, Math.Min(FieldColors.Count, NumberOfColors));
             return FieldColors[idx];
+        }
+        public (int, int) PickRandomUnoccupiedField()
+        {
+            Random rnd = new Random();
+            int X = rnd.Next(2 * (Size - 1)) - Size + 1;
+            int Y = rnd.Next(2 * (Size - 1)) - Size + 1;
+            if (X * Y > 0 && Math.Abs(X) + Math.Abs(Y) >= Size || Players.Any(p => p.OwnFields.Any(f => f.CoordX == X && f.CoordY == Y))) return PickRandomUnoccupiedField();
+            else return (X, Y);
         }
         public void ActivateNextPlayer()
         {
@@ -93,16 +123,27 @@ namespace HexagonGame.Core.Models
                 FreeColors.Add(color);
             }
         }
-        public void TakeRobotTurns()
+        public async Task TakeRobotTurns()
         {
             while(ActivePlayer is RobotPlayer)
             {
-                //await Task.Delay(2000);
+                await Task.Delay(2000);
                 RobotPlayer Robot = (RobotPlayer)ActivePlayer;
                 Robot.ChangeColor(Fields, FreeColors);
                 ActivateNextPlayer();
                 FindFreeColors();
+                TryDetectEndOfGame();
             }
+            RealPlayerTakingTurn = true;
+        }
+        public bool TryDetectEndOfGame()
+        {
+            if(Fields.All(f => Players.Any(p => p.OwnFields.Contains(f))))
+            {
+                Player WINNER = Players.Aggregate((mostFields, next) => next.OwnFields.Count > mostFields.OwnFields.Count ? next : mostFields);
+                return true;
+            }
+            return false;
         }
     }
 }

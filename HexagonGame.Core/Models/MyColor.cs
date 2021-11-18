@@ -42,5 +42,9 @@ namespace HexagonGame.Core.Models
             G = g;
             B = b;
         }
+        public bool TooSimilarTo(MyColor other)
+        {
+            return (R == other.R && G == other.G) || (R == other.R && B == other.B) || (B == other.B && G == other.G);            
+        }        
     }
 }

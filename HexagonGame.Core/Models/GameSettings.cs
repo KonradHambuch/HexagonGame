@@ -1,38 +1,73 @@
-﻿using Prism.Mvvm;
+﻿using Prism.Commands;
+using Prism.Mvvm;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 
 namespace HexagonGame.Core.Models
 {
     public class GameSettings : BindableBase
-    {        
-        private int numberOfColors = 0;
+    {
+
+        private bool allValid;
+        public bool AllValid
+        {
+            get => allValid;
+            set
+            {
+                SetProperty(ref allValid, value);
+            }
+        }
+        private string sizeError;
+        public string SizeError
+        {
+            get => sizeError;
+            set
+            {
+                SetProperty(ref sizeError, value);
+                AllValid = SizeError == null && ColorNumberError == null;
+            }
+        }
+        private string colorNumberError;
+        public string ColorNumberError
+        {
+            get => colorNumberError;
+            set
+            {
+                SetProperty(ref colorNumberError, value);
+                AllValid = SizeError == null && ColorNumberError == null;
+            }
+        }
+        private int numberOfColors = 0; 
         public int NumberOfColors
         {
             get => numberOfColors;
             set
             {
-                SetProperty(ref numberOfColors, value);
-                ColorList.Clear();                
-                for (int i = 0; i < value; i++)
-                {
-                    AddRandomColor();
-                }
+                if(ValidateColorNumber(value)) SetProperty(ref numberOfColors, value);                   
             }
         }
         private int size = 7;
         public int Size
         {
             get => size;
-            set => SetProperty(ref size, value);
+            set
+            {
+                if (ValidateSize(value))
+                {
+                    SetProperty(ref size, value);
+                    Width = 550 / ((Size * 2) - 1);
+                    Height = 520 / ((Size * 2) - 1);
+                }
+            }
         }
         public int Width { get; set; } = 40;
         public int Height { get; set; } = 36;
-        public ObservableCollection<Player> Players { get; set; } = new ObservableCollection<Player>();
+        public ObservableCollection<Player> Players { get; set; } = new ObservableCollection<Player>();        
         public List<MyColor> PlayerColors = new List<MyColor>()
         {
             new MyColor(255,255,0,0), //red
@@ -42,49 +77,51 @@ namespace HexagonGame.Core.Models
             new MyColor(255, 188,0,255), //purple
             new MyColor(255,255,255,128) //yellowish
         };
-        public ObservableCollection<MyColor> ColorList { get; set; } = new ObservableCollection<MyColor>();
 
         public GameSettings()
         {
             Players.CollectionChanged += ResetColorNumber;
-        }
-        public void AddRandomColor()
-        {
-            Random random = new Random();
-            MyColor NewColor = new MyColor(((byte)random.Next(3) + 5) * 31, (byte)random.Next(13) * 20, (byte)random.Next(13) * 20, (byte)random.Next(13) * 20);
-            if (ColorList.Contains(NewColor))
-            {
-                AddRandomColor();
-            }
-            else
-            {
-                ColorList.Add(new MyColor((byte)random.Next(256), (byte)random.Next(256), (byte)random.Next(256), (byte)random.Next(256)));
-                return;
-            }
-        }
+
+            NewPlayer();
+        }        
         public bool NewPlayer()
         {
-            (int X, int Y) = PickRandomUnoccupiedField();
-            Players.Add(new Player("Játékos" + Players.Count, X, Y, PlayerColors[Players.Count]));
+            Players.Add(new Player("Játékos" + Players.Count, PlayerColors[Players.Count]));
             return Players.Count >= 6 ? false : true;
         }
         public bool NewRobotPlayer()
-        {
-            (int X, int Y) = PickRandomUnoccupiedField();
-            Players.Add(new RobotPlayer("Robot" + Players.Count, X, Y, PlayerColors[Players.Count]));
+        {            
+            Players.Add(new RobotPlayer("Robot" + Players.Count, PlayerColors[Players.Count]));
             return Players.Count >= 6 ? false : true;
         }
         public void ResetColorNumber(object sender, NotifyCollectionChangedEventArgs e)
         {
             NumberOfColors = Players.Count + 3;
-        }
-        public (int, int) PickRandomUnoccupiedField()
+        }         
+        public bool ValidateSize(int validateableSize)
         {
-            Random rnd = new Random();
-            int X = rnd.Next(2 * (Size - 1)) - Size + 1;
-            int Y = rnd.Next(2 * (Size - 1)) - Size + 1;
-            if (X * Y > 0 && Math.Abs(X) + Math.Abs(Y) >= Size || Players.Any(p => p.StartCoordX == X && p.StartCoordY == Y)) return PickRandomUnoccupiedField();
-            else return (X, Y);
-        }        
+            if (validateableSize < 3 || validateableSize > 20)
+            {
+                SizeError = "A pálya mérete 3 és 20 közötti legyen.";
+                return false;
+            }
+            SizeError = null;
+            return true;
+        }
+        public bool ValidateColorNumber(int validateableColorNumber)
+        {            
+            if (validateableColorNumber < Players.Count + 3)
+            {
+                ColorNumberError = "A színek száma legalább a játékosok száma + 3.";
+                return false;
+            }
+            if (validateableColorNumber < 4 || validateableColorNumber > 20)
+            {
+                ColorNumberError = "A színek száma 4 és 20 közötti legyen.";
+                return false ;
+            }
+            ColorNumberError = null;
+            return true;
+        }
     }
 }

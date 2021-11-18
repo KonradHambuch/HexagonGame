@@ -46,14 +46,16 @@ namespace HexagonGame.ViewModels
         {
             _navigationService.Navigate(PageTokens.GameCreationPage, null);
         }
-        public void ChangeColorCommandFunc(object color)
-        {
+        public async void ChangeColorCommandFunc(object color)
+        {            
             Game.ActivePlayer.ChangeColor((MyColor)color, Game.Fields);            
             Game.ActivateNextPlayer();
-            Game.FindFreeColors();     
+            Game.FindFreeColors();
+            Game.TryDetectEndOfGame();
             if(Game.ActivePlayer is RobotPlayer)
             {
-                Game.TakeRobotTurns();
+                Game.RealPlayerTakingTurn = false;
+                await Game.TakeRobotTurns();
             }
         }                
     }
