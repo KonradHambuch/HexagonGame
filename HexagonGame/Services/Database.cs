@@ -10,7 +10,7 @@ using Windows.Storage;
 
 namespace HexagonGame.Services
 {
-    public class Database
+    public class Database : IDatabase
     {
         public Dictionary<string, Ranking> Rankings { get; set; } = new Dictionary<string, Ranking>();
         public string DbFilePath { get; set; }

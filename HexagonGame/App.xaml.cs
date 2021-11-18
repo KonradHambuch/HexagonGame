@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using System.Threading.Tasks;
-
+using HexagonGame.Services;
 using Microsoft.Practices.Unity;
 
 using Prism.Mvvm;
@@ -28,6 +28,7 @@ namespace HexagonGame
             // register a singleton using Container.RegisterType<IInterface, Type>(new ContainerControlledLifetimeManager());
             base.ConfigureContainer();
             Container.RegisterInstance<IResourceLoader>(new ResourceLoaderAdapter(new ResourceLoader()));
+            Container.RegisterType<IDatabase, Database>();
         }
 
         protected override async Task OnLaunchApplicationAsync(LaunchActivatedEventArgs args)
