@@ -18,20 +18,12 @@ using Windows.UI.Xaml.Navigation;
 
 namespace HexagonGame.Views
 {
-    public sealed partial class RankingDialogPage : ContentDialog
+    public sealed partial class RankingDialogPage : Page
     {
         private RankingDialogViewModel ViewModel => DataContext as RankingDialogViewModel;
         public RankingDialogPage()
         {
             this.InitializeComponent();
-        }
-
-        private void ContentDialog_PrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
-        {
-        }
-
-        private void ContentDialog_SecondaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
-        {
         }
     }
 }

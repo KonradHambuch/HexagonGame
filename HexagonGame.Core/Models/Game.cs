@@ -9,8 +9,10 @@ using System.Threading.Tasks;
 
 namespace HexagonGame.Core.Models
 {
+    public delegate void GameEndedHandler();
     public class Game : BindableBase
     {
+        public event GameEndedHandler GameEnded;
         private Player activePlayer;
         public int Size { get; set; }
         private bool realPlayerTakingTurn;
@@ -21,6 +23,8 @@ namespace HexagonGame.Core.Models
         }
         public ObservableCollection<Field> Fields { get; set; } = new ObservableCollection<Field>();
         public ObservableCollection<Player> Players { get; set; } = new ObservableCollection<Player>();
+
+        public List<MyColor> PossibleColors = new List<MyColor>() { new MyColor(255, 230, 25, 75), new MyColor(255, 60, 180, 75), new MyColor(255, 255, 225, 25), new MyColor(255, 0, 130, 200), new MyColor(255, 245, 130, 48), new MyColor(255, 145, 30, 180), new MyColor(255, 70, 240, 240), new MyColor(255, 240, 50, 230), new MyColor(255, 210, 245, 60), new MyColor(255, 250, 190, 212), new MyColor(255, 0, 128, 128), new MyColor(255, 220, 190, 255), new MyColor(255, 170, 110, 40), new MyColor(255, 255, 250, 200), new MyColor(255, 128, 0, 0), new MyColor(255, 170, 255, 195), new MyColor(255, 128, 128, 0), new MyColor(255, 255, 215, 180), new MyColor(255, 0, 0, 128), new MyColor(255, 128, 128, 128), new MyColor(255, 255, 255, 255) };
         public ObservableCollection<MyColor> FieldColors { get; set; } = new ObservableCollection<MyColor>();
         public ObservableCollection<MyColor> FreeColors { get; set; } = new ObservableCollection<MyColor>();
         public Player ActivePlayer
@@ -28,15 +32,16 @@ namespace HexagonGame.Core.Models
             get => activePlayer;
             set => SetProperty(ref activePlayer, value);
         }
+        public Player Winner { get; set; }
 
         public Game(GameSettings GameSettings)
         {
             Size = GameSettings.Size;
             Players = GameSettings.Players;
-            for (int i = 0; i < GameSettings.NumberOfColors; i++)
+            foreach(var color in PossibleColors.Take(GameSettings.NumberOfColors))
             {
-                AddRandomColor();
-            }            
+                FieldColors.Add(color);
+            }
             CreateHexagons(GameSettings.Size, GameSettings.Width, GameSettings.Height);
             foreach (var player in Players)
             {
@@ -51,25 +56,11 @@ namespace HexagonGame.Core.Models
             }
             ActivateNextPlayer();  
             FindFreeColors();            
-        }
-        public void AddRandomColor()
-        {
-            Random random = new Random();
-            MyColor NewColor = new MyColor(((byte)random.Next(3) + 5) * 31, (byte)random.Next(4) * 60, (byte)random.Next(4) * 60, (byte)random.Next(4) * 60);
-            if (FieldColors.Any(c => c.TooSimilarTo(NewColor)))
-            {
-                AddRandomColor();
-            }
-            else
-            {
-                FieldColors.Add(NewColor);
-                return;
-            }
-        }
-        public MyColor PickRandomColor(int NumberOfColors = 6)
+        }        
+        public MyColor PickRandomColor()
         {
             Random rnd = new Random();
-            var idx = rnd.Next(0, Math.Min(FieldColors.Count, NumberOfColors));
+            var idx = rnd.Next(0, FieldColors.Count);
             return FieldColors[idx];
         }
         public (int, int) PickRandomUnoccupiedField()
@@ -123,27 +114,40 @@ namespace HexagonGame.Core.Models
                 FreeColors.Add(color);
             }
         }
+        public async void PlayerChooseColor(MyColor color)
+        {
+            ActivePlayer.ChangeColor(color, Fields);
+            ActivateNextPlayer();
+            FindFreeColors();
+            TryDetectEndOfGame();
+            if (ActivePlayer is RobotPlayer)
+            {
+                RealPlayerTakingTurn = false;
+                await TakeRobotTurns();                              
+            }
+            
+        }
         public async Task TakeRobotTurns()
         {
             while(ActivePlayer is RobotPlayer)
             {
-                await Task.Delay(2000);
+                await Task.Delay(200);
                 RobotPlayer Robot = (RobotPlayer)ActivePlayer;
                 Robot.ChangeColor(Fields, FreeColors);
                 ActivateNextPlayer();
                 FindFreeColors();
-                TryDetectEndOfGame();
+                TryDetectEndOfGame();               
             }
             RealPlayerTakingTurn = true;
         }
-        public bool TryDetectEndOfGame()
+        public void TryDetectEndOfGame()
         {
-            if(Fields.All(f => Players.Any(p => p.OwnFields.Contains(f))))
+            if (Fields.All(f => Players.Any(p => p.OwnFields.Contains(f))))
             {
-                Player WINNER = Players.Aggregate((mostFields, next) => next.OwnFields.Count > mostFields.OwnFields.Count ? next : mostFields);
-                return true;
+                Winner = Players.Aggregate((mostFields, next) => next.OwnFields.Count > mostFields.OwnFields.Count ? next : mostFields);
+                GameEnded?.Invoke();
+                GameEnded = null;
             }
-            return false;
         }
     }
 }

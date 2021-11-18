@@ -4,5 +4,6 @@
     {
         public const string GamePage = "Game";
         public const string GameCreationPage = "GameCreation";
+        public const string RankingDialogPage = "RankingDialog";
     }
 }

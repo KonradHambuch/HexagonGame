@@ -15,8 +15,8 @@ namespace HexagonGame.Views
         {
             InitializeComponent();
 
-            ApplicationView.GetForCurrentView().SetPreferredMinSize(new Size(400, 500));
-            ApplicationView.PreferredLaunchViewSize = new Size(400, 500);
+            ApplicationView.GetForCurrentView().SetPreferredMinSize(new Size(1000, 700));
+            ApplicationView.PreferredLaunchViewSize = new Size(1000, 700);
             ApplicationView.PreferredLaunchWindowingMode = ApplicationViewWindowingMode.PreferredLaunchViewSize;
         }
     }

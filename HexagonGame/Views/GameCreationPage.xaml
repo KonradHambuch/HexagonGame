@@ -8,7 +8,7 @@
     xmlns:prismMvvm="using:Prism.Windows.Mvvm"
     prismMvvm:ViewModelLocator.AutoWireViewModel="True" 
     mc:Ignorable="d">
-    <Grid x:Name="ContentArea" Margin="{StaticResource MediumLeftRightMargin}">
+    <Grid x:Name="ContentArea" Margin="{StaticResource MediumLeftRightMargin}" HorizontalAlignment="Center" VerticalAlignment="Center">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="Auto" />
@@ -51,7 +51,7 @@
                                 <SolidColorBrush Color="{Binding Color, Converter={StaticResource MyColorToColorConverter}}"/>
                             </Rectangle.Fill>
                         </Rectangle>
-                        <Slider Grid.Column="2" Value="{Binding Level, Mode=TwoWay}" Minimum="1" Maximum="5" Visibility="{Binding IsRobot, Converter={StaticResource BoolToVisibilityConverter}}"></Slider>
+                        <Slider Grid.Column="2" Value="{Binding Level, Mode=TwoWay}" Minimum="1" Maximum="3" Visibility="{Binding IsRobot, Converter={StaticResource BoolToVisibilityConverter}}"></Slider>
                     </Grid>
                 </DataTemplate>
             </ListView.ItemTemplate>

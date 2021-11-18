@@ -43,9 +43,9 @@ namespace HexagonGame.Services
             }
             else
             {
-                Rankings.Add(player.Name, new Ranking { Score = 1 });
+                Rankings.Add(player.Name, new Ranking { Name = player.Name, Score = 1 });
             }
-
+            CommitRankings();
         }
 
         public void LoadRankings()
@@ -60,7 +60,6 @@ namespace HexagonGame.Services
         public void CommitRankings()
         {
             var json = JsonConvert.SerializeObject(Rankings);
-
             using (StreamWriter sw = new StreamWriter(DbFilePath))
             {
                 sw.WriteLine(json);

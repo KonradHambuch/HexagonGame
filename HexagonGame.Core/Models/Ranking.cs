@@ -1,11 +1,23 @@
-﻿using System;
+﻿using Prism.Mvvm;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace HexagonGame.Core.Models
 {
-    public class Ranking
+    public class Ranking : BindableBase
     {
-        public int Score { get; set; }
+        private string name;
+        private int score;
+        public string Name 
+        {   
+            get => name;
+            set => SetProperty(ref name, value);
+        }
+        public int Score 
+        { 
+            get => score;
+            set => SetProperty(ref score, value);
+        }
     }
 }
