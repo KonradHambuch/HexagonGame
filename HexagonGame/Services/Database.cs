@@ -65,5 +65,10 @@ namespace HexagonGame.Services
                 sw.WriteLine(json);
             }
         }
+
+        public Dictionary<string, Ranking> GetRankings()
+        {
+            return this.Rankings;
+        }
     }
 }

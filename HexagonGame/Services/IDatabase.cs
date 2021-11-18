@@ -7,13 +7,14 @@ using System.Threading.Tasks;
 
 namespace HexagonGame.Services
 {
-    interface IDatabase
+    public interface IDatabase
     {
         void AddWinner(Player player);
 
         void LoadRankings();
 
         void CommitRankings();
+
+        Dictionary<string, Ranking> GetRankings();
     }
-}
 }

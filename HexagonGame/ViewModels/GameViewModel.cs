@@ -18,7 +18,7 @@ namespace HexagonGame.ViewModels
     {
         //Private fields
         private INavigationService _navigationService;
-        private Database Database = new Database();
+        private IDatabase Database;
         private Game game;
         //Properties
         public INavigationService NavigationService { get; set; }        
@@ -32,9 +32,10 @@ namespace HexagonGame.ViewModels
         public DelegateCommand NewGameCommand { get; set; }
         public DelegateCommand<object> ChangeColorCommand { get; set; }
         //Ctor
-        public GameViewModel(INavigationService navigationService)
+        public GameViewModel(INavigationService navigationService, IDatabase dataBase)
         {  
-            _navigationService = navigationService;            
+            _navigationService = navigationService;
+            Database = dataBase;
             NewGameCommand = new DelegateCommand(NewGame);
             ChangeColorCommand = new DelegateCommand<object>(ChangeColorCommandFunc);           
         }
@@ -55,7 +56,7 @@ namespace HexagonGame.ViewModels
         }
         public void NavigateToRankingsDialog()
         {  
-            _navigationService.Navigate(PageTokens.RankingDialogPage, Database.Rankings);
+            _navigationService.Navigate(PageTokens.RankingDialogPage, Database.GetRankings());
         }        
         public void GameEndDetected()
         {
