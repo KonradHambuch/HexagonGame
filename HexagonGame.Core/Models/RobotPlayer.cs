@@ -43,6 +43,7 @@ namespace HexagonGame.Core.Models
         {
             MyColor ChoosenColor = null;
             Dictionary<MyColor, HashSet<Field>> ColorNeighbours = CountNegihbourColors(AllFields, FreeColors);
+            if (ColorNeighbours.Count == 0) return FreeColors[0];
             switch (Level)
             {
                 case 1:

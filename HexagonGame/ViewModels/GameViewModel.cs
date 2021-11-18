@@ -35,7 +35,6 @@ namespace HexagonGame.ViewModels
         public GameViewModel(INavigationService navigationService)
         {  
             _navigationService = navigationService;            
-            
             NewGameCommand = new DelegateCommand(NewGame);
             ChangeColorCommand = new DelegateCommand<object>(ChangeColorCommandFunc);           
         }
@@ -43,38 +42,25 @@ namespace HexagonGame.ViewModels
         public override void OnNavigatedTo(NavigatedToEventArgs e, Dictionary<string, object> viewModelState)
         {
             base.OnNavigatedTo(e, viewModelState);
-            Game = new Game((GameSettings)e.Parameter); 
+            Game = new Game((GameSettings)e.Parameter);
+            Game.GameEnded += new GameEndedHandler(GameEndDetected);
         }        
         public void NewGame()
         {
             _navigationService.Navigate(PageTokens.GameCreationPage, null);
         }
-        public async void ChangeColorCommandFunc(object color)
-        {            
-            Game.ActivePlayer.ChangeColor((MyColor)color, Game.Fields);            
-            Game.ActivateNextPlayer();
-            Game.FindFreeColors();
-            if (TryDetectEndOfGame()) NavigateToRankingsDialog();
-            if(Game.ActivePlayer is RobotPlayer)
-            {
-                Game.RealPlayerTakingTurn = false;
-                await Game.TakeRobotTurns();
-            }
-
+        public void ChangeColorCommandFunc(object color)
+        {
+            Game.PlayerChooseColor((MyColor)color); 
         }
         public void NavigateToRankingsDialog()
         {  
             _navigationService.Navigate(PageTokens.RankingDialogPage, Database.Rankings);
-        }
-        public bool TryDetectEndOfGame()
+        }        
+        public void GameEndDetected()
         {
-            if (Game.Fields.All(f => Game.Players.Any(p => p.OwnFields.Contains(f))))
-            {
-                Player WINNER = Game.Players.Aggregate((mostFields, next) => next.OwnFields.Count > mostFields.OwnFields.Count ? next : mostFields);
-                Database.AddWinner(WINNER);
-                return true;
-            }
-            return false;
+            Database.AddWinner(Game.Winner);
+            NavigateToRankingsDialog();
         }
     }
 }
