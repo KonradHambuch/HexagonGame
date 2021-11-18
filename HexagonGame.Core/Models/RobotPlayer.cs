@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Drawing;
+using System.Linq;
 using System.Text;
 
 namespace HexagonGame.Core.Models
 {
     public class RobotPlayer : Player
     {
-        public int Level { get; set; } = 5;
+        public int Level { get; set; } = 3;
         Dictionary<MyColor, HashSet<Field>> OneColorNeighbourFields = new Dictionary<MyColor, HashSet<Field>>();
         public RobotPlayer(string Name, MyColor Color) : base(Name, Color)
         {
@@ -40,18 +41,49 @@ namespace HexagonGame.Core.Models
         }
         public MyColor ChooseColor(ObservableCollection<Field> AllFields, ObservableCollection<MyColor> FreeColors)
         {
-            int MaxCount = 0;
-            MyColor MaxColor = FreeColors[0];
+            MyColor ChoosenColor = null;
             Dictionary<MyColor, HashSet<Field>> ColorNeighbours = CountNegihbourColors(AllFields, FreeColors);
-            foreach (var entry in ColorNeighbours)
+            switch (Level)
             {
-                if (entry.Value.Count > MaxCount)
-                {
-                    MaxCount = entry.Value.Count;
-                    MaxColor = entry.Key;
-                }
+                case 1:
+                    // code block
+
+                    ChoosenColor = ColorNeighbours.OrderBy(kvp => kvp.Value.Count).First().Key;
+
+                    break;
+                case 2:
+                    // code block
+
+                    var rand = new Random();
+                    if (rand.Next(2) > 0)
+                    {
+                        ChoosenColor = ColorNeighbours.OrderBy(kvp => kvp.Value.Count).First().Key;
+                    }
+                    else
+                    {
+                        ChoosenColor = ColorNeighbours.OrderByDescending(kvp => kvp.Value.Count).First().Key;
+                    }
+
+                    break;
+                default:
+                    // code block
+                    //MyColor MaxColor = FreeColors[0];
+                    //int MaxCount = 0;
+
+                    ChoosenColor = ColorNeighbours.OrderByDescending(kvp => kvp.Value.Count).First().Key;
+
+                    //foreach (var entry in ColorNeighbours)
+                    //{
+                    //    if (entry.Value.Count > MaxCount)
+                    //    {
+                    //        MaxCount = entry.Value.Count;
+                    //        MaxColor = entry.Key;
+                    //    }
+                    //}
+
+                    break;
             }
-            return MaxColor;
+            return ChoosenColor;
         }        
         public void ChangeColor(ObservableCollection<Field> AllFields, ObservableCollection<MyColor> FreeColors)
         {
