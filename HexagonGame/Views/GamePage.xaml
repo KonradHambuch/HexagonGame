@@ -8,7 +8,7 @@
     xmlns:prismMvvm="using:Prism.Windows.Mvvm"
     prismMvvm:ViewModelLocator.AutoWireViewModel="True" 
     mc:Ignorable="d">
-    <Grid x:Name="ContentArea" Margin="{StaticResource MediumLeftRightMargin}" VerticalAlignment="Center" >        
+    <Grid x:Name="ContentArea" Margin="{StaticResource MediumLeftRightMargin}" VerticalAlignment="Center" Background="AliceBlue">        
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="Auto" />
@@ -17,39 +17,34 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-
-
         <!--Color Buttons-->
-        <Border BorderBrush="Blue" BorderThickness="3" Margin="24">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="Auto"/>
-                </Grid.ColumnDefinitions>
-                <TextBlock VerticalAlignment="Center" Grid.Column="0" Margin="12">Választható színek:</TextBlock>
-                <ItemsControl Grid.Column="1" Grid.Row="0" ItemsSource="{Binding Game.FreeColors}" Margin="10,10,10,10" >
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <StackPanel Orientation="Horizontal" />
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <Button Command="{Binding ElementName=ContentArea, Path=DataContext.ChangeColorCommand}" CommandParameter="{Binding}" IsEnabled="{Binding ElementName=ContentArea, Path=DataContext.Game.RealPlayerTakingTurn}" Padding="0,0,0,0" Margin="6">
-                                <Rectangle Width="25" Height="25">
-                                    <Rectangle.Fill>
-                                        <SolidColorBrush Color="{Binding Converter={StaticResource MyColorToColorConverter}}"/>
-                                    </Rectangle.Fill>
-                                </Rectangle>
-                            </Button>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
-            </Grid>
-        </Border>
+        <Grid Background="Khaki" Margin="12">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock VerticalAlignment="Center" Grid.Column="0" Margin="12">Választható színek:</TextBlock>
+            <ItemsControl Grid.Column="1" Grid.Row="0" ItemsSource="{Binding Game.FreeColors}" Margin="10,10,10,10" >
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Horizontal" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Button Command="{Binding ElementName=ContentArea, Path=DataContext.ChangeColorCommand}" CommandParameter="{Binding}" IsEnabled="{Binding ElementName=ContentArea, Path=DataContext.Game.RealPlayerTakingTurn}" Padding="0,0,0,0" Margin="6">
+                            <Rectangle Width="25" Height="25">
+                                <Rectangle.Fill>
+                                    <SolidColorBrush Color="{Binding Converter={StaticResource MyColorToColorConverter}}"/>
+                                </Rectangle.Fill>
+                            </Rectangle>
+                        </Button>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </Grid>
         <!--Players-->
-        <Border Grid.Row="1" Grid.Column="0" BorderBrush="Blue" BorderThickness="3" Margin="24">
-            <ItemsControl  ItemsSource="{Binding Game.Players}">
+            <ItemsControl Grid.Row="1" Grid.Column="0" ItemsSource="{Binding Game.Players}" Background="Khaki" Margin="12">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
                         <StackPanel Orientation="Vertical"/>
@@ -75,28 +70,26 @@
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
-        </Border>
+        
         <!--Hexagons-->
-        <Border Grid.Row="1" Grid.Column="1" BorderBrush="Blue" BorderThickness="3" Margin="24">
-            <ItemsControl  ItemsSource="{Binding Game.Fields}">
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <Canvas Width="600" Height="600"/>
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <Polygon Points="{Binding PolygonItem.PointsString}" StrokeThickness="5">
-                            <Polygon.Stroke>
-                                <SolidColorBrush Color="{Binding Colors.MarkColor, Converter={StaticResource MyColorToColorConverter}}"/>
-                            </Polygon.Stroke>
-                            <Polygon.Fill>
-                                <SolidColorBrush Color="{Binding Colors.OwnColor, Converter={StaticResource MyColorToColorConverter}}"></SolidColorBrush>
-                            </Polygon.Fill>
-                        </Polygon>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
-        </Border>
+        <ItemsControl Grid.Row="1" Grid.Column="1" ItemsSource="{Binding Game.Fields}" Background="Khaki">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <Canvas Width="600" Height="600"/>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Polygon Points="{Binding PolygonItem.PointsString}" StrokeThickness="5">
+                        <Polygon.Stroke>
+                            <SolidColorBrush Color="{Binding Colors.MarkColor, Converter={StaticResource MyColorToColorConverter}}"/>
+                        </Polygon.Stroke>
+                        <Polygon.Fill>
+                            <SolidColorBrush Color="{Binding Colors.OwnColor, Converter={StaticResource MyColorToColorConverter}}"></SolidColorBrush>
+                        </Polygon.Fill>
+                    </Polygon>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
     </Grid>
 </Page>

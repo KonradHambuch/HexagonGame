@@ -8,7 +8,7 @@
     xmlns:prismMvvm="using:Prism.Windows.Mvvm"
     prismMvvm:ViewModelLocator.AutoWireViewModel="True" 
     mc:Ignorable="d">
-    <Grid x:Name="ContentArea" Margin="{StaticResource MediumLeftRightMargin}" HorizontalAlignment="Center" VerticalAlignment="Center">
+    <Grid x:Name="ContentArea" Margin="{StaticResource MediumLeftRightMargin}" HorizontalAlignment="Center" VerticalAlignment="Center" Background="Khaki">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="Auto" />

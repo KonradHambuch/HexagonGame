@@ -9,8 +9,9 @@
     prismMvvm:ViewModelLocator.AutoWireViewModel="True" 
     mc:Ignorable="d">
 
-    <Grid VerticalAlignment="Center" HorizontalAlignment="Center">
+    <Grid VerticalAlignment="Center" HorizontalAlignment="Center" Background="Khaki">
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
@@ -19,18 +20,35 @@
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
-        <TextBlock Grid.Row="0" Grid.ColumnSpan="2" HorizontalAlignment="Center" Text="RANGLISTA"/>
-        <ListView Grid.Row="1" Grid.ColumnSpan="2" ItemsSource="{Binding Rankings}" Padding="12">            
+        <SymbolIcon Grid.ColumnSpan="2" Grid.Row="0" HorizontalAlignment="Center" Symbol="Emoji2" Margin="12" />
+        <TextBlock Grid.Row="1" Grid.ColumnSpan="2" HorizontalAlignment="Center" Text="RANGLISTA" Margin="4"/>
+        <ListView Grid.Row="2" Grid.ColumnSpan="2" ItemsSource="{Binding Rankings}" HorizontalAlignment="Stretch" Padding="4">
+            <ListView.HeaderTemplate>
+                <DataTemplate>
+                    <Grid HorizontalAlignment="Center">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="100"/>
+                            <ColumnDefinition Width="200"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" HorizontalAlignment="Center" Margin="4,6">Név</TextBlock>
+                        <TextBlock Grid.Column="1" HorizontalAlignment="Center" Margin="4,6">Győzelmek száma</TextBlock>
+                    </Grid>
+                </DataTemplate>
+            </ListView.HeaderTemplate>
             <ListView.ItemTemplate>
                 <DataTemplate>
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="{Binding Name}" Margin="10"/>
-                        <TextBlock Text="{Binding Score}" Margin="10"/>
-                    </StackPanel>
+                    <Grid BorderBrush="CadetBlue" BorderThickness="3" Margin="2" HorizontalAlignment="Center">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="100"/>
+                            <ColumnDefinition Width="200"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" Text="{Binding Name}" Margin="0,12" HorizontalAlignment="Center"/>
+                        <TextBlock Grid.Column="1" Text="{Binding Score}" Margin="12" HorizontalAlignment="Center"/>
+                    </Grid>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
-        <Button Grid.Row="2" Grid.Column="0" Command="{Binding NewGameCommand}">Új Játék</Button>
-        <Button Grid.Row="2" Grid.Column="1" Command="{Binding ExitCommand}">Kilépés</Button>
+        <Button Grid.Row="3" Grid.Column="0" Command="{Binding NewGameCommand}" HorizontalAlignment="Center" Margin="12">Új Játék</Button>
+        <Button Grid.Row="3" Grid.Column="1" Command="{Binding ExitCommand}" HorizontalAlignment="Center" Margin="12">Kilépés</Button>
     </Grid>
 </Page>
